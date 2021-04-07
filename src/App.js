@@ -1,23 +1,29 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import axios from 'axios';
 
 function App() {
+  const [img, setImage] = useState(null);
+
+  const onChange = (e) => {
+    setImage(e.target.files[0]);
+  }
+
+  const onClick = async () => {
+    const formData = new FormData();
+    formData.append('file', img);
+    formData.append("filename", img.name);
+    formData.append("title", "ihl");
+    // 서버의 upload API 호출
+    const res = await axios.post("http://localhost:4000/api/upload", formData);
+    console.log(res);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <input type="file" onChange={onChange}/>
+      <button onClick={onClick}>제출</button>
+      <img src="http://localhost:4000/bkg-summer1617780130514.jpg"></img>
     </div>
   );
 }
